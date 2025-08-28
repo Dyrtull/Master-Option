@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Comparativo: Máster en Robótica y IGCSE D&T</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Harmony -->
+    <!-- Application Structure Plan: The application is structured into three main thematic sections, mirroring the source report's logical divisions: "Fundamentos Comunes", "Opción Especialista: Sistemas y Control", and "Componente de Proyecto". This structure was chosen to provide a clear and segmented user experience, preventing information overload. Navigation is handled by a top tab bar, allowing users to switch between these distinct content views easily. This task-oriented approach lets a user (e.g., a teacher) focus on one area of the curriculum at a time. The user flow is simple: select a tab to instantly view the corresponding curriculum mappings. This design prioritizes clarity and ease of navigation over a complex, multi-layered interface, making the data highly consumable. -->
+    <!-- Visualization & Content Choices: Report Info: Mapping of Master's modules to IGCSE D&T units. Goal: To inform, compare, and organize the connections. Viz/Presentation Method: The core information is presented in structured cards within a responsive grid layout (HTML/Tailwind). For a high-level summary, a Donut Chart (Chart.js/Canvas) visualizes the density of connections for each main curriculum area. Interaction: The primary interaction is tab-based navigation (JS) to switch between content sections. The chart provides tooltips on hover for specific data points. Justification: The card layout organizes detailed text-based information clearly, while the donut chart provides an immediate, quantitative overview of the curriculum overlap. This dual approach serves both quick-glance and in-depth exploration needs. Library/Method: Vanilla JS for navigation, Chart.js for visualization. CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #383838;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #A37B73;
+            color: #FFFFFF;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .nav-button:not(.active):hover {
+            background-color: #E4D5D1;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E4D5D1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-[#6B4F4B]">Análisis Comparativo Curricular</h1>
+            <p class="mt-2 text-lg text-[#A37B73]">Máster en Robótica y Cambridge IGCSE Design & Technology (0445)</p>
+        </header>
+
+        <main>
+            <nav class="flex justify-center mb-10 bg-[#F1E9E6] p-2 rounded-full shadow-inner max-w-2xl mx-auto">
+                <button data-target="common" class="nav-button active flex-1 py-2 px-4 rounded-full text-sm sm:text-base font-semibold">Fundamentos Comunes</button>
+                <button data-target="systems" class="nav-button flex-1 py-2 px-4 rounded-full text-sm sm:text-base font-semibold">Sistemas y Control</button>
+                <button data-target="project" class="nav-button flex-1 py-2 px-4 rounded-full text-sm sm:text-base font-semibold">Componente de Proyecto</button>
+            </nav>
+
+            <div id="content-container">
+                
+                <section id="common" class="content-section active">
+                    <div class="text-center mb-8 max-w-3xl mx-auto">
+                        <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">1. Fundamentos Comunes: Conocimiento Base</h2>
+                        <p class="text-md text-[#A37B73]">Esta sección explora cómo los conceptos avanzados del máster fortalecen la enseñanza de los conocimientos fundamentales del programa IGCSE D&T. El programa de máster proporciona una comprensión profunda de los principios de diseño, la aplicación de tecnología y la sostenibilidad, enriqueciendo la base sobre la cual los estudiantes construyen sus habilidades prácticas.</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="card p-6 rounded-lg shadow-md">
+                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Design Briefs y Resolución de Problemas</h3>
+                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 1 (Contenido Común)</p>
+                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                <li>Filosofía general del programa</li>
+                                <li>Módulo 1: Diseño y modelado de robots</li>
+                                <li>Módulo 5: Algoritmos de planificación</li>
+                            </ul>
+                        </div>
+                        <div class="card p-6 rounded-lg shadow-md">
+                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">CAD/CAM</h3>
+                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 1 (Contenido Común)</p>
+                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                <li>Módulo 9: Realidad virtual y aumentada</li>
+                                <li>Sección: Licencias de software (Ansys, UiPath)</li>
+                            </ul>
+                        </div>
+                        <div class="card p-6 rounded-lg shadow-md">
+                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Sostenibilidad</h3>
+                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 1 (Contenido Común)</p>
+                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                <li>Enfoque en optimización de procesos</li>
+                                <li>Sección: Salidas profesionales (soluciones sostenibles)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="systems" class="content-section">
+                    <div class="text-center mb-8 max-w-3xl mx-auto">
+                        <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">2. Opción Especialista: Sistemas y Control</h2>
+                        <p class="text-md text-[#A37B73]">Aquí es donde la conexión es más directa. El máster ofrece una base teórica y práctica avanzada que se alinea perfectamente con la especialización en Sistemas y Control. Los usuarios pueden explorar cómo los principios de la robótica avanzada, desde la dinámica de los actuadores hasta la inteligencia artificial, se aplican directamente a los conceptos de estructuras, mecanismos y electrónica que los estudiantes de IGCSE deben dominar.</p>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-center mb-4 text-[#A37B73]">Estructuras y Mecanismos</h3>
+                            <div class="space-y-6">
+                                <div class="card p-6 rounded-lg shadow-md">
+                                    <h4 class="font-bold text-lg mb-2">Cargas Aplicadas y Fuerzas</h4>
+                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
+                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                        <li>Módulo 1: Cinemática y dinámica de robots</li>
+                                        <li>Módulo 4: Análisis de sistemas no lineales</li>
+                                    </ul>
+                                </div>
+                                <div class="card p-6 rounded-lg shadow-md">
+                                    <h4 class="font-bold text-lg mb-2">Transmisión de Movimiento</h4>
+                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
+                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                        <li>Módulo 1: Diseño y modelado de robots</li>
+                                        <li>Módulo 4: Sistemas de control automático</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-center mb-4 text-[#A37B73]">Electrónica y Control</h3>
+                            <div class="space-y-6">
+                                <div class="card p-6 rounded-lg shadow-md">
+                                    <h4 class="font-bold text-lg mb-2">Sistemas de Control</h4>
+                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
+                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                        <li>Módulo 4: Control automático, predictivo y sistemas embebidos</li>
+                                    </ul>
+                                </div>
+                                <div class="card p-6 rounded-lg shadow-md">
+                                    <h4 class="font-bold text-lg mb-2">Transductores y Sensores</h4>
+                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
+                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                        <li>Módulo 6: Técnicas de visión artificial</li>
+                                        <li>Módulo 7: Percepción visual con aprendizaje automático</li>
+                                    </ul>
+                                </div>
+                                <div class="card p-6 rounded-lg shadow-md">
+                                    <h4 class="font-bold text-lg mb-2">Compuertas Lógicas</h4>
+                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
+                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                        <li>Módulo 2: Agentes inteligentes e IA</li>
+                                        <li>Módulo 4: Sistemas de control automático</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="project" class="content-section">
+                    <div class="text-center mb-8 max-w-3xl mx-auto">
+                        <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">3. Componente de Proyecto: Aplicación Práctica</h2>
+                         <p class="text-md text-[#A37B73]">El proyecto es la culminación del aprendizaje del estudiante. Esta sección demuestra cómo la experiencia del máster en el ciclo de vida completo del desarrollo de un producto robótico, desde la concepción hasta la prueba, puede guiar a los estudiantes a través de sus propios proyectos. Se enfoca en el uso de herramientas de prototipado avanzadas y metodologías de evaluación rigurosas para elevar la calidad y el alcance de los proyectos estudiantiles.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                         <div class="card p-6 rounded-lg shadow-md">
+                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Prototipado Avanzado</h3>
+                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 2 (Preparación para el proyecto)</p>
+                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                <li>Módulo 9: Aplicación de RV/RA (uso de simuladores)</li>
+                            </ul>
+                        </div>
+                        <div class="card p-6 rounded-lg shadow-md">
+                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Pruebas y Evaluación</h3>
+                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 2 (Preparación para el proyecto)</p>
+                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
+                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
+                                <li>Enfoque general en análisis de complejidad y evaluación de desempeño (ej. Módulo 5)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="mt-16">
+                <div class="text-center mb-8 max-w-3xl mx-auto">
+                    <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">Distribución de Conexiones por Área</h2>
+                    <p class="text-md text-[#A37B73]">Este gráfico resume visualmente la cantidad de módulos y conceptos del Máster en Robótica que se aplican a cada una de las áreas principales del currículo de IGCSE Design & Technology. Permite identificar rápidamente las áreas con mayor sinergia.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="curriculumChart"></canvas>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            const switchTab = (targetId) => {
+                navButtons.forEach(button => {
+                    button.classList.toggle('active', button.dataset.target === targetId);
+                });
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+            };
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    switchTab(button.dataset.target);
+                });
+            });
+
+            const chartData = {
+                labels: ['Fundamentos Comunes', 'Sistemas y Control', 'Componente de Proyecto'],
+                datasets: [{
+                    label: 'Módulos Relevantes',
+                    data: [4, 5, 2],
+                    backgroundColor: [
+                        '#A37B73',
+                        '#6B4F4B',
+                        '#E4D5D1'
+                    ],
+                    borderColor: '#FDFBF8',
+                    borderWidth: 4,
+                    hoverOffset: 10
+                }]
+            };
+
+            const chartConfig = {
+                type: 'doughnut',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#383838',
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#383838',
+                            titleFont: {
+                                size: 16,
+                                weight: 'bold',
+                                family: 'Inter, sans-serif'
+                            },
+                            bodyFont: {
+                                size: 14,
+                                family: 'Inter, sans-serif'
+                            },
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const ctx = document.getElementById('curriculumChart').getContext('2d');
+            new Chart(ctx, chartConfig);
+        });
+    </script>
+
+</body>
+</html>
