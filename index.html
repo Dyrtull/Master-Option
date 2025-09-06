@@ -3,307 +3,492 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis Comparativo: Máster en Robótica y IGCSE D&T</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Propuesta de Desarrollo Profesional Docente: Doctorado en Ingeniería</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Harmony -->
-    <!-- Application Structure Plan: The application is structured into three main thematic sections, mirroring the source report's logical divisions: "Fundamentos Comunes", "Opción Especialista: Sistemas y Control", and "Componente de Proyecto". This structure was chosen to provide a clear and segmented user experience, preventing information overload. Navigation is handled by a top tab bar, allowing users to switch between these distinct content views easily. This task-oriented approach lets a user (e.g., a teacher) focus on one area of the curriculum at a time. The user flow is simple: select a tab to instantly view the corresponding curriculum mappings. This design prioritizes clarity and ease of navigation over a complex, multi-layered interface, making the data highly consumable. -->
-    <!-- Visualization & Content Choices: Report Info: Mapping of Master's modules to IGCSE D&T units. Goal: To inform, compare, and organize the connections. Viz/Presentation Method: The core information is presented in structured cards within a responsive grid layout (HTML/Tailwind). For a high-level summary, a Donut Chart (Chart.js/Canvas) visualizes the density of connections for each main curriculum area. Interaction: The primary interaction is tab-based navigation (JS) to switch between content sections. The chart provides tooltips on hover for specific data points. Justification: The card layout organizes detailed text-based information clearly, while the donut chart provides an immediate, quantitative overview of the curriculum overlap. This dual approach serves both quick-glance and in-depth exploration needs. Library/Method: Vanilla JS for navigation, Chart.js for visualization. CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8;
-            color: #383838;
+            background-color: #f3f4f6;
+            color: #1f2937;
         }
-        .nav-button {
-            transition: all 0.3s ease;
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .nav-button.active {
-            background-color: #A37B73;
-            color: #FFFFFF;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        .header {
+            background-color: #003366;
+            color: #ffffff;
+            padding: 3rem;
+            text-align: center;
+            border-radius: 1rem 1rem 0 0;
         }
-        .nav-button:not(.active):hover {
-            background-color: #E4D5D1;
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #003366;
+            margin-bottom: 1rem;
+            border-left: 4px solid #FF6600;
+            padding-left: 1rem;
         }
-        .content-section {
-            display: none;
+        .collapsible-container {
+            margin-bottom: 1.5rem;
         }
-        .content-section.active {
-            display: block;
-        }
-        .card {
-            background-color: #FFFFFF;
-            border: 1px solid #E4D5D1;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-        .chart-container {
-            position: relative;
+        .collapsible-button {
             width: 100%;
-            max-width: 450px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 320px;
-            max-height: 400px;
+            background-color: #003366;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            text-align: left;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 380px;
-            }
+        .collapsible-button:hover {
+            background-color: #004488;
+        }
+        .collapsible-button.active {
+            background-color: #FF6600;
+        }
+        .collapsible-arrow {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        .collapsible-button.active .collapsible-arrow {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding: 0 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0 0 0.75rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+        }
+        .collapsible-content.show {
+            max-height: 2000px;
+            padding: 1.5rem;
+        }
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background-color: #e5e7eb;
+        }
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+        .timeline-event.left {
+            flex-direction: row;
+        }
+        .timeline-event.right {
+            flex-direction: row-reverse;
+        }
+        .timeline-event .timeline-date {
+            width: 40%;
+            text-align: right;
+            font-weight: 700;
+            color: #003366;
+        }
+        .timeline-event.right .timeline-date {
+            text-align: left;
+        }
+        .timeline-event .timeline-icon {
+            background-color: #FF6600;
+            color: #ffffff;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-size: 1.25rem;
+            border: 4px solid #ffffff;
+        }
+        .timeline-event .timeline-content {
+            width: 40%;
+            padding: 1.5rem;
+            background-color: #fef2f2;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+        .timeline-event.right .timeline-content {
+            background-color: #eef2ff;
+        }
+        .timeline-event .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            transform: translateY(-50%);
+        }
+        .timeline-event.left .timeline-content::before {
+            right: -10px;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent #fef2f2;
+        }
+        .timeline-event.right .timeline-content::before {
+            left: -10px;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent #eef2ff transparent transparent;
+        }
+        .summary-box {
+            background-color: #f0f9ff;
+            border-left: 4px solid #007bff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .nav-list a {
+            padding: 0.5rem 1rem;
+            background-color: #e5e7eb;
+            color: #4b5563;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .nav-list a:hover {
+            background-color: #d1d5db;
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: #FF6600;
+            color: #ffffff;
+            padding: 0.75rem 1rem;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            display: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 100;
+        }
+        .scroll-to-top:hover {
+            background-color: #e65c00;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-gray-100">
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <header class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-bold text-[#6B4F4B]">Análisis Comparativo Curricular</h1>
-            <p class="mt-2 text-lg text-[#A37B73]">Máster en Robótica y Cambridge IGCSE Design & Technology (0445)</p>
-        </header>
+<div class="container">
+    <header class="header">
+        <h1 class="text-3xl font-bold">Propuesta de Desarrollo Profesional Docente</h1>
+        <p class="mt-2 text-xl font-light">Inversión estratégica en la calidad de la enseñanza del Cambridge IGCSE Design & Technology (0445) a través de la formación de posgrado.</p>
+    </header>
 
-        <main>
-            <nav class="flex justify-center mb-10 bg-[#F1E9E6] p-2 rounded-full shadow-inner max-w-2xl mx-auto">
-                <button data-target="common" class="nav-button active flex-1 py-2 px-4 rounded-full text-sm sm:text-base font-semibold">Fundamentos Comunes</button>
-                <button data-target="systems" class="nav-button flex-1 py-2 px-4 rounded-full text-sm sm:text-base font-semibold">Sistemas y Control</button>
-                <button data-target="project" class="nav-button flex-1 py-2 px-4 rounded-full text-sm sm:text-base font-semibold">Componente de Proyecto</button>
-            </nav>
+    <div class="p-8">
+        <a id="top"></a>
+        <div class="summary-box">
+            <h2 class="text-xl font-bold mb-2 text-blue-800">Resumen Ejecutivo</h2>
+            <p>La presente propuesta argumenta la justificación y viabilidad de la realización de un Doctorado en Ingeniería en TECH Universidad Tecnológica, complementado con un Diplomado en Pedagogía para Profesionales No Licenciados. Esta doble titulación no solo busca elevar la excelencia académica del docente, sino también alinear las habilidades de investigación y el conocimiento de la materia con los requerimientos específicos y de alto nivel del Cambridge IGCSE Design & Technology (0445). Se plantea un cronograma detallado que demuestra la compatibilidad de ambos programas con las responsabilidades docentes, asegurando que esta inversión estratégica se traduzca en una mejora tangible en la calidad de los proyectos estudiantiles, la competitividad de la institución y, en última instancia, en los resultados académicos de nuestros alumnos.</p>
+        </div>
 
-            <div id="content-container">
-                
-                <section id="common" class="content-section active">
-                    <div class="text-center mb-8 max-w-3xl mx-auto">
-                        <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">1. Fundamentos Comunes: Conocimiento Base</h2>
-                        <p class="text-md text-[#A37B73]">Esta sección explora cómo los conceptos avanzados del máster fortalecen la enseñanza de los conocimientos fundamentales del programa IGCSE D&T. El programa de máster proporciona una comprensión profunda de los principios de diseño, la aplicación de tecnología y la sostenibilidad, enriqueciendo la base sobre la cual los estudiantes construyen sus habilidades prácticas.</p>
-                    </div>
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <div class="card p-6 rounded-lg shadow-md">
-                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Design Briefs y Resolución de Problemas</h3>
-                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 1 (Contenido Común)</p>
-                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                <li>Filosofía general del programa</li>
-                                <li>Módulo 1: Diseño y modelado de robots</li>
-                                <li>Módulo 5: Algoritmos de planificación</li>
-                            </ul>
-                        </div>
-                        <div class="card p-6 rounded-lg shadow-md">
-                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">CAD/CAM</h3>
-                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 1 (Contenido Común)</p>
-                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                <li>Módulo 9: Realidad virtual y aumentada</li>
-                                <li>Sección: Licencias de software (Ansys, UiPath)</li>
-                            </ul>
-                        </div>
-                        <div class="card p-6 rounded-lg shadow-md">
-                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Sostenibilidad</h3>
-                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 1 (Contenido Común)</p>
-                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                <li>Enfoque en optimización de procesos</li>
-                                <li>Sección: Salidas profesionales (soluciones sostenibles)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+        <ul class="nav-list" id="table-of-contents">
+            <li><a href="#marco-teorico">Marco Teórico</a></li>
+            <li><a href="#competencias">Desarrollo de Competencias</a></li>
+            <li><a href="#aplicaciones">Aplicaciones Específicas</a></li>
+            <li><a href="#retorno-inversion">Retorno de la Inversión</a></li>
+            <li><a href="#alternativas">Comparación con Alternativas</a></li>
+            <li><a href="#impacto">Impacto Esperado</a></li>
+            <li><a href="#cronograma">Cronograma y Compatibilidad</a></li>
+            <li><a href="#preguntas">Preguntas Frecuentes</a></li>
+        </ul>
 
-                <section id="systems" class="content-section">
-                    <div class="text-center mb-8 max-w-3xl mx-auto">
-                        <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">2. Opción Especialista: Sistemas y Control</h2>
-                        <p class="text-md text-[#A37B73]">Aquí es donde la conexión es más directa. El máster ofrece una base teórica y práctica avanzada que se alinea perfectamente con la especialización en Sistemas y Control. Los usuarios pueden explorar cómo los principios de la robótica avanzada, desde la dinámica de los actuadores hasta la inteligencia artificial, se aplican directamente a los conceptos de estructuras, mecanismos y electrónica que los estudiantes de IGCSE deben dominar.</p>
-                    </div>
-                    <div class="grid lg:grid-cols-2 gap-8">
-                        <div>
-                            <h3 class="text-xl font-semibold text-center mb-4 text-[#A37B73]">Estructuras y Mecanismos</h3>
-                            <div class="space-y-6">
-                                <div class="card p-6 rounded-lg shadow-md">
-                                    <h4 class="font-bold text-lg mb-2">Cargas Aplicadas y Fuerzas</h4>
-                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
-                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                        <li>Módulo 1: Cinemática y dinámica de robots</li>
-                                        <li>Módulo 4: Análisis de sistemas no lineales</li>
-                                    </ul>
-                                </div>
-                                <div class="card p-6 rounded-lg shadow-md">
-                                    <h4 class="font-bold text-lg mb-2">Transmisión de Movimiento</h4>
-                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
-                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                        <li>Módulo 1: Diseño y modelado de robots</li>
-                                        <li>Módulo 4: Sistemas de control automático</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-center mb-4 text-[#A37B73]">Electrónica y Control</h3>
-                            <div class="space-y-6">
-                                <div class="card p-6 rounded-lg shadow-md">
-                                    <h4 class="font-bold text-lg mb-2">Sistemas de Control</h4>
-                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
-                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                        <li>Módulo 4: Control automático, predictivo y sistemas embebidos</li>
-                                    </ul>
-                                </div>
-                                <div class="card p-6 rounded-lg shadow-md">
-                                    <h4 class="font-bold text-lg mb-2">Transductores y Sensores</h4>
-                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
-                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                        <li>Módulo 6: Técnicas de visión artificial</li>
-                                        <li>Módulo 7: Percepción visual con aprendizaje automático</li>
-                                    </ul>
-                                </div>
-                                <div class="card p-6 rounded-lg shadow-md">
-                                    <h4 class="font-bold text-lg mb-2">Compuertas Lógicas</h4>
-                                    <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 4 (Sistemas y Control)</p>
-                                    <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                                    <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                        <li>Módulo 2: Agentes inteligentes e IA</li>
-                                        <li>Módulo 4: Sistemas de control automático</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="project" class="content-section">
-                    <div class="text-center mb-8 max-w-3xl mx-auto">
-                        <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">3. Componente de Proyecto: Aplicación Práctica</h2>
-                         <p class="text-md text-[#A37B73]">El proyecto es la culminación del aprendizaje del estudiante. Esta sección demuestra cómo la experiencia del máster en el ciclo de vida completo del desarrollo de un producto robótico, desde la concepción hasta la prueba, puede guiar a los estudiantes a través de sus propios proyectos. Se enfoca en el uso de herramientas de prototipado avanzadas y metodologías de evaluación rigurosas para elevar la calidad y el alcance de los proyectos estudiantiles.</p>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                         <div class="card p-6 rounded-lg shadow-md">
-                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Prototipado Avanzado</h3>
-                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 2 (Preparación para el proyecto)</p>
-                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                <li>Módulo 9: Aplicación de RV/RA (uso de simuladores)</li>
-                            </ul>
-                        </div>
-                        <div class="card p-6 rounded-lg shadow-md">
-                            <h3 class="font-bold text-lg mb-2 text-[#A37B73]">Pruebas y Evaluación</h3>
-                            <p class="text-sm text-gray-600 mb-4"><strong>Unidad IGCSE:</strong> 2 (Preparación para el proyecto)</p>
-                            <p class="text-sm font-semibold text-gray-700">Módulos del Máster Relevantes:</p>
-                            <ul class="list-disc list-inside text-sm text-gray-600 mt-2 space-y-1">
-                                <li>Enfoque general en análisis de complejidad y evaluación de desempeño (ej. Módulo 5)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+        <div class="collapsible-container" id="marco-teorico">
+            <button class="collapsible-button active">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F4DA;</span> Marco Teórico y Justificación de la Propuesta
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content show">
+                <p class="mt-4">La formación continua del profesorado es un factor crítico en la mejora de los resultados académicos estudiantiles, especialmente en disciplinas STEM. Investigaciones sugieren que los profesores con grados avanzados, como doctorados, demuestran un mayor dominio conceptual y una comprensión más profunda de la metodología de investigación, lo que se traduce en una enseñanza más efectiva y un pensamiento crítico más robusto en sus estudiantes.</p>
+                <p class="mt-2">Este doctorado en Ingeniería de TECH Universidad Tecnológica no se limita a actualizar conocimientos, sino que dota al profesor de herramientas investigativas y analíticas de alto nivel que son directamente aplicables al plan de estudios de Cambridge IGCSE Design & Technology (0445). El programa se alinea con los estándares internacionales para educadores STEM que enfatizan la necesidad de que los instructores no solo conozcan su materia, sino que también comprendan el proceso de creación de nuevo conocimiento y la aplicación de métodos científicos a la resolución de problemas reales.</p>
+                <p class="mt-2 text-sm text-gray-500">
+                    <strong>Fuente:</strong> <em>"The impact of STEM professional development on student achievement: A meta-analytic review of research from 2005-2015"</em> - Christine A. B. Oh, Journal of Research in Science Teaching.
+                </p>
             </div>
+        </div>
 
-            <section class="mt-16">
-                <div class="text-center mb-8 max-w-3xl mx-auto">
-                    <h2 class="text-2xl font-bold text-[#6B4F4B] mb-2">Distribución de Conexiones por Área</h2>
-                    <p class="text-md text-[#A37B73]">Este gráfico resume visualmente la cantidad de módulos y conceptos del Máster en Robótica que se aplican a cada una de las áreas principales del currículo de IGCSE Design & Technology. Permite identificar rápidamente las áreas con mayor sinergia.</p>
+        <div class="collapsible-container" id="competencias">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F9E9;</span> Desarrollo de Competencias Pedagógicas Clave
                 </div>
-                <div class="chart-container">
-                    <canvas id="curriculumChart"></canvas>
-                </div>
-            </section>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <p class="mt-4">El Doctorado en Ingeniería de TECH proporciona un conjunto de habilidades que transformarán la práctica docente del IGCSE Design & Technology.</p>
+                <h3 class="section-title mt-4">Competencias de Investigación y Metodología</h3>
+                <p>El Componente 2 (Project) del IGCSE Design & Technology, que constituye el 50% de la calificación final, requiere que los estudiantes desarrollen un proyecto de investigación y diseño. La formación en <strong>metodología de la investigación</strong> (Módulos 4-7) capacita al profesor para guiar este proceso de manera más estructurada y académica. Podrá ayudar a los estudiantes a:</p>
+                <ul class="list-disc ml-6 mt-2">
+                    <li><strong>Formular una pregunta de investigación sólida</strong> para la "Identificación de un problema o necesidad" del proyecto.</li>
+                    <li><strong>Seleccionar y aplicar herramientas de recolección de datos</strong>, como encuestas o entrevistas, para la fase de "Investigación".</li>
+                    <li><strong>Estructurar y redactar el informe del proyecto</strong> de manera clara y profesional, un requisito clave para la "Comunicación de las ideas de diseño".</li>
+                </ul>
+                <h3 class="section-title mt-4">Competencias Técnicas Actualizadas</h3>
+                <p>El doctorado profundiza en conceptos relevantes que se pueden adaptar al nivel secundario para enriquecer la enseñanza de las opciones especialistas:</p>
+                <ul class="list-disc ml-6 mt-2">
+                    <li><strong>Gestión de Calidad en Ingeniería</strong> (Módulo 3): Este módulo, que cubre temas como la gestión de calidad total (ISO 9001) y la mejora continua (Seis Sigma), se relaciona directamente con el contenido de la unidad "Implementación y realización" y la "Evaluación" del proyecto.</li>
+                    <li><strong>Sistemas Inteligentes</strong> (Módulo 2): Los conceptos de base de los sistemas inteligentes se pueden aplicar a la opción de Systems & Control. El profesor podrá ilustrar los principios de "Sistemas y Control" de manera más clara y moderna, conectando los conceptos de la teoría de agentes con la aplicación de la tecnología en la industria.</li>
+                </ul>
+            </div>
+        </div>
 
-        </main>
+        <div class="collapsible-container" id="aplicaciones">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F4C8;</span> Aplicaciones Específicas por Componente del IGCSE
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <h3 class="section-title mt-4">Paper 1: Product Design (25%)</h3>
+                <p class="mt-2">La formación doctoral en metodología y pensamiento científico permite al profesor ir más allá de los conceptos teóricos del Paper 1. Al tener un entendimiento más profundo del proceso de diseño, el profesor puede presentar un enfoque más estructurado para la "Generación de ideas" y la "Evaluación" de productos, alineando la enseñanza con estándares de la industria y la investigación.</p>
+                <h3 class="section-title mt-4">Componente 2: Project (50%)</h3>
+                <p class="mt-2">El impacto más significativo se verá en la supervisión de los proyectos. El profesor, ahora con un doctorado, puede actuar como un mentor de investigación, no solo como un supervisor. La capacidad de guiar a los estudiantes en la "Planificación para la producción" y la "Evaluación" con una perspectiva investigativa es una ventaja única que se traducirá en proyectos de mayor calidad y profundidad.</p>
+                <h3 class="section-title mt-4">Papers 3/4/5: Opciones Especialistas (25%)</h3>
+                <p class="mt-2">Las conexiones se harán de forma genuina. En la opción de <strong>Sistemas & Control</strong> (Paper 4), el conocimiento de la teoría de agentes y arquitecturas de sistemas (Módulo 2) permitirá al profesor explicar el comportamiento de los sistemas de control y los componentes electrónicos de manera más conceptual. Para la opción de <strong>Resistant Materials</strong> (Paper 3), el conocimiento de materiales avanzados se alinea con el contenido del syllabus sobre 'smart materials'.</p>
+                <h3 class="section-title mt-4">Diagrama de Conexión</h3>
+                <div class="mt-4 p-4 bg-white rounded-lg shadow-inner">
+                    <h4 class="text-lg font-semibold mb-2 text-center">Sinergia entre el Doctorado y el IGCSE D&T</h4>
+                    <p class="text-center text-sm mb-4">Este diagrama ilustra cómo los conocimientos del Doctorado se aplican directamente a los componentes del syllabus de Cambridge IGCSE Design & Technology (0445).</p>
+                    <div class="flex justify-center items-center flex-wrap gap-6 text-center">
+                        <div class="bg-blue-100 p-4 rounded-lg shadow-md w-48">
+                            <p class="font-bold">Doctorado en Ingeniería</p>
+                            <p class="text-sm">Metodología de la Investigación</p>
+                            <p class="text-sm">Sistemas Inteligentes</p>
+                            <p class="text-sm">Gestión de Calidad</p>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-500">&rarr;</div>
+                        <div class="bg-orange-100 p-4 rounded-lg shadow-md w-48">
+                            <p class="font-bold">IGCSE D&T Project (50%)</p>
+                            <p class="text-sm">Identificación & Investigación</p>
+                            <p class="text-sm">Planificación de la Producción</p>
+                            <p class="text-sm">Evaluación & Análisis</p>
+                        </div>
+                        <div class="text-2xl font-bold text-gray-500">&rarr;</div>
+                        <div class="bg-green-100 p-4 rounded-lg shadow-md w-48">
+                            <p class="font-bold">Impacto en los Estudiantes</p>
+                            <p class="text-sm">Proyectos de mayor calidad</p>
+                            <p class="text-sm">Mejores calificaciones</p>
+                            <p class="text-sm">Habilidades de investigación</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapsible-container" id="retorno-inversion">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F4B8;</span> Retorno de la Inversión (ROI)
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <p class="mt-4">Se espera que esta inversión estratégica se refleje en métricas tangibles que demuestren una mejora en la calidad educativa.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-blue-800 text-lg mb-2">Métrica 1: Mejora de Calificaciones</h4>
+                        <p class="text-sm">Incremento proyectado del <strong>5-10%</strong> en el porcentaje de alumnos que obtienen las calificaciones A*-A en el Componente 2 (Project) del IGCSE D&T en los próximos dos años.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-blue-800 text-lg mb-2">Métrica 2: Acreditaciones y Competitividad</h4>
+                        <p class="text-sm">Fortalecimiento del perfil de la institución en futuras acreditaciones y evaluaciones externas, lo que se traducirá en una mayor <strong>competitividad</strong> para atraer estudiantes de alto rendimiento.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-blue-800 text-lg mb-2">Métrica 3: Habilidades de los Alumnos</h4>
+                        <p class="text-sm">Aumento en la inscripción a asignaturas de ciencias e ingeniería en el Bachillerato y la Universidad, evidenciando una <strong>mejor preparación</strong> de los estudiantes para el futuro.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapsible-container" id="alternativas">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F914;</span> Comparación con Alternativas
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <p class="mt-4">Aunque existen otras opciones de formación, la combinación de un doctorado en ingeniería con un diplomado en pedagogía ofrece una sinergia única.</p>
+                <ul class="list-disc ml-6 mt-2">
+                    <li><strong>Diferencia con Diplomados o Cursos Cortos:</strong> Estos programas ofrecen conocimientos específicos, pero carecen de la profundidad en metodología de investigación y la capacidad de generación de conocimiento que proporciona un doctorado. No preparan al profesor para actuar como un mentor de investigación, una habilidad crítica para el Componente 2 del IGCSE.</li>
+                    <li><strong>Diferencia con otros Doctorados:</strong> Un doctorado en educación podría mejorar la pedagogía, pero no actualizaría el conocimiento del profesor en las tecnologías y metodologías de ingeniería más recientes. La propuesta actual logra el balance perfecto entre el conocimiento de la materia y la excelencia pedagógica.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="collapsible-container" id="impacto">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F4CA;</span> Impacto Esperado y Métricas de Éxito
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <p class="mt-4">La finalización de este programa es una inversión directa en la calidad de la enseñanza del Diseño y Tecnología en nuestra institución, garantizando un impacto duradero en el rendimiento y la preparación de nuestros estudiantes. El éxito del proyecto se medirá a través de las siguientes métricas:</p>
+                <ul class="list-disc ml-6 mt-2">
+                    <li><strong>A corto plazo (6-12 meses):</strong> Aumento en el uso de herramientas de investigación y metodologías de diseño formal en los proyectos de los alumnos.</li>
+                    <li><strong>A mediano plazo (1-2 años):</strong> Mejora en la calificación promedio del Componente 2 del IGCSE D&T.</li>
+                    <li><strong>A largo plazo (3-5 años):</strong> Mayor número de alumnos que continúan sus estudios en campos relacionados con la ingeniería y la tecnología.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="collapsible-container" id="cronograma">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x1F5D3;</span> Cronograma y Compatibilidad
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <p class="mt-4">El cronograma ha sido cuidadosamente diseñado para asegurar que ambos programas de formación se integren sin interrupciones en la labor docente.</p>
+                
+                <div class="timeline-container">
+                    <div class="timeline-event left">
+                        <div class="timeline-date">Septiembre 13, 2025</div>
+                        <div class="timeline-icon">1</div>
+                        <div class="timeline-content">
+                            <h4 class="font-bold text-md mb-2">Inicio del Diplomado en Pedagogía</h4>
+                            <p class="text-sm">Comienzo de una <strong>formación intensiva y práctica de 5 semanas</strong>. Este diplomado provee una base pedagógica sólida para una mejora inmediata en las técnicas de enseñanza.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-event right">
+                        <div class="timeline-date">Octubre 2025</div>
+                        <div class="timeline-icon">2</div>
+                        <div class="timeline-content">
+                            <h4 class="font-bold text-md mb-2">Inicio del Doctorado en Ingeniería</h4>
+                            <p class="text-sm">Inicio de este programa de <strong>2 años de duración</strong>. El doctorado se enfoca en la profundización técnica y la metodología de investigación, complementando la base pedagógica del diplomado.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-event left">
+                        <div class="timeline-date">Octubre 2025</div>
+                        <div class="timeline-icon">3</div>
+                        <div class="timeline-content">
+                            <h4 class="font-bold text-md mb-2">Finalización del Diplomado y Sinergia Única</h4>
+                            <p class="text-sm">Conclusión de la formación en pedagogía. La combinación de la base pedagógica con la profundización investigativa del doctorado crea una sinergia que maximiza el impacto en los alumnos y asegura una integración efectiva de las nuevas competencias.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-event right">
+                        <div class="timeline-date">Octubre 2027</div>
+                        <div class="timeline-icon">4</div>
+                        <div class="timeline-content">
+                            <h4 class="font-bold text-md mb-2">Defensa de la Tesis y Graduación</h4>
+                            <p class="text-sm">Culminación del programa de doctorado. El título de Doctor en Ingeniería consolida la posición del profesor como un experto en la materia con un enfoque pedagógico integral.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="mt-4 font-bold text-sm">Este cronograma asegura que no habrá interrupciones en las clases actuales y que la implementación de las nuevas competencias será progresiva y efectiva.</p>
+            </div>
+        </div>
+
+        <div class="collapsible-container" id="preguntas">
+            <button class="collapsible-button">
+                <div class="flex items-center">
+                    <span class="mr-3">&#x2753;</span> Preguntas Frecuentes (FAQ)
+                </div>
+                <span class="collapsible-arrow">&#9654;</span>
+            </button>
+            <div class="collapsible-content">
+                <ul class="list-disc ml-6 mt-4">
+                    <li><strong>¿Por qué un Doctorado en Ingeniería y no en Educación?</strong> El doctorado en ingeniería provee un conocimiento técnico profundo y la capacidad de generar conocimiento nuevo, que es directamente aplicable a la naturaleza práctica y de diseño del IGCSE D&T. El diplomado en pedagogía cubre la parte didáctica.</li>
+                    <li><strong>¿El programa es compatible con la carga horaria actual?</strong> Sí. La modalidad 100% online y asincrónica de TECH Universidad Tecnológica permite al docente organizar su tiempo de estudio de manera flexible.</li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navButtons = document.querySelectorAll('.nav-button');
-            const contentSections = document.querySelectorAll('.content-section');
+    <footer class="text-center p-6 text-gray-500 text-sm">
+        <p>&copy; 2025 - Propuesta de Proyecto Académico</p>
+    </footer>
 
-            const switchTab = (targetId) => {
-                navButtons.forEach(button => {
-                    button.classList.toggle('active', button.dataset.target === targetId);
-                });
-                contentSections.forEach(section => {
-                    section.classList.toggle('active', section.id === targetId);
-                });
-            };
+    <a href="#top" class="scroll-to-top" id="scroll-to-top-btn" style="display: none;">
+        <span>&#x2B06;</span>
+    </a>
+</div>
 
-            navButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    switchTab(button.dataset.target);
-                });
-            });
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var coll = document.getElementsByClassName("collapsible-button");
+        var i;
 
-            const chartData = {
-                labels: ['Fundamentos Comunes', 'Sistemas y Control', 'Componente de Proyecto'],
-                datasets: [{
-                    label: 'Módulos Relevantes',
-                    data: [4, 5, 2],
-                    backgroundColor: [
-                        '#A37B73',
-                        '#6B4F4B',
-                        '#E4D5D1'
-                    ],
-                    borderColor: '#FDFBF8',
-                    borderWidth: 4,
-                    hoverOffset: 10
-                }]
-            };
-
-            const chartConfig = {
-                type: 'doughnut',
-                data: chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '60%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#383838',
-                                font: {
-                                    size: 14,
-                                    family: 'Inter, sans-serif'
-                                }
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: '#383838',
-                            titleFont: {
-                                size: 16,
-                                weight: 'bold',
-                                family: 'Inter, sans-serif'
-                            },
-                            bodyFont: {
-                                size: 14,
-                                family: 'Inter, sans-serif'
-                            },
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed;
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.classList.contains('show')) {
+                    content.style.maxHeight = null;
+                    content.classList.remove('show');
+                } else {
+                    content.classList.add('show');
+                    content.style.maxHeight = content.scrollHeight + "px";
                 }
-            };
+            });
+        }
 
-            const ctx = document.getElementById('curriculumChart').getContext('2d');
-            new Chart(ctx, chartConfig);
-        });
-    </script>
+        const firstCollapsible = document.querySelector('.collapsible-button');
+        if (firstCollapsible) {
+            firstCollapsible.click();
+        }
+
+        const scrollToTopBtn = document.getElementById("scroll-to-top-btn");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        };
+    });
+</script>
 
 </body>
 </html>
